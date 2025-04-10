@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+
+# data & results
+data/
+experiments/
+*.csv
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# etc
+*.zip
+*.tar.gz

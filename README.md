@@ -4,6 +4,7 @@
 - `src/`: Core modules (model, training, evaluation)
 - `notebooks/`: EDA and early experiments
 - `scripts/`: Shell scripts to run experiments
+- `data_preparation/`: Unzipping raw datasets
 - `config/`: Configuration files (hyperparameters, paths)
 - `data/`: Sample data for testing (excluded from git)
 - `experiments/`: Logs and checkpoints (excluded from git)

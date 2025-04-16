@@ -3,7 +3,7 @@
 # and the names of the classes.
 
 # Detecting only one class: pill
-path: C:/Users/daniel/Capstone/AI/yolo/datasets
+path: ../datasets # gpu server
 train: images/train
 val: images/val
 names:

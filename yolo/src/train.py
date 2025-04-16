@@ -2,7 +2,7 @@ from ultralytics import YOLO
 model = YOLO('yolov8n.pt')  # load a pretrained model
 
 results = model.train(
-    data=r'C:\Users\daniel\Capstone\AI\yolo\config\dataset.yaml',
+    data='../dataset.yaml',
     epochs=5,
     imgsz=640,
     batch=-1, # choose the size of batch automatically depending on GPU

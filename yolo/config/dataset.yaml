@@ -1,0 +1,10 @@
+# Dataset configuration file for YOLOv8n
+# This file contains the paths to the training and validation datasets
+# and the names of the classes.
+
+# Detecting only one class: pill
+path: C:/Users/daniel/Capstone/AI/yolo/datasets
+train: images/train
+val: images/val
+names:
+  0: pill

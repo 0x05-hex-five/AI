@@ -13,3 +13,7 @@ experiments/
 # etc
 *.zip
 *.tar.gz
+
+# YOLO
+/yolo/datasets
+/yolo/weights

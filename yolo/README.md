@@ -24,4 +24,4 @@
 - 라벨 형식: COCO → YOLO 포맷 변환
 
 ## 결과 시각화
-![결과 예시 이미지](./result.jpg)
+![결과 예시 이미지](./results/pred.jpg)

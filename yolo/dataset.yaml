@@ -3,8 +3,7 @@
 # and the names of the classes.
 
 # Detecting only one class: pill
-path: ./datasets
-train: images/train
-val: images/val
+train: /data1/team5_2/yolo/datasets/images/train
+val: /data1/team5_2/yolo/datasets/images/val
 names:
   0: pill

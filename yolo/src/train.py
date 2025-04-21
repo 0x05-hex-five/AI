@@ -13,6 +13,5 @@ results = model.train(
     plots=True,
     project='runs_pill',
     name='yolov8n_pill_detector',
-    patience=10, # early stopping patience in case of overfitting,
     device=0 # 0 for GPU, 'cpu' for CPU
 )

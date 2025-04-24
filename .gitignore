@@ -8,9 +8,6 @@ experiments/
 *.csv
 *.xlsx
 *.json
-*.png
-*.jpg
-*.jpeg
 
 # Jupyter Notebook
 .ipynb_checkpoints

@@ -23,5 +23,14 @@
 - 선택 기준: 데이터셋 1번 폴더 내 약 이미지 중 임의로 샘플링
 - 라벨 형식: COCO → YOLO 포맷 변환
 
-## 결과 시각화
+## YOLOv8 추론 + 크롭 스크립트 (하위 폴더 포함)
+```
+bash scripts/run_inference.sh
+```
+
+## YOLOv8 학습 결과 시각화
 ![결과 예시 이미지](./results/pred.jpg)
+
+
+## YOLOv8 추론 + 크롭 결과 시각화
+![결과 예시 이미지](./runs/detect/predict/crops/pill/K-002650_0_0_0_0_60_000_200.jpg)

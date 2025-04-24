@@ -23,3 +23,7 @@ experiments/
 /yolo/datasets
 /yolo/weights
 /yolo/runs
+/yolo/inference_imgs
+
+# Classification
+/clf/dataset

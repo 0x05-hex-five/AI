@@ -49,7 +49,7 @@ def get_filtered_jsons(json_root, camera_la=90, camera_lo=000):
     pattern = f'*_{camera_la}_{camera_lo:03d}_*.json'
     return glob.glob(os.path.join(json_root, pattern))
 
-camera_las = [60, 70, 75, 90] # 카메라 위도
+camera_las = range(50, 95, 5) # 카메라 위도
 camera_los = range(0, 380, 20) # 카메라 경도
 
 os.makedirs(output_dir, exist_ok=True)
@@ -61,19 +61,25 @@ for group in groups:
         
         if not os.path.isdir(base_path):
             continue
-        
+
         for folder in os.listdir(base_path):
             json_root = os.path.join(base_path, folder)
+            print(json_root)
+            if not os.path.isdir(json_root):
+                continue
+        
+            for folder in os.listdir(json_root):
+                json_path = os.path.join(json_root, folder)
 
-            # 지정한 위도-경도 조합으로만 필터링
-            for la in camera_las:
-                for lo in camera_los:
-                    json_paths = get_filtered_jsons(json_root, camera_la=la, camera_lo=lo)
-                    
-                    if json_paths:
-                        for json_path in json_paths:
-                            group_type = 'train' if 'Training' in json_path else 'val'
-                            output_path = os.path.join(output_dir, group_type)
-                            os.makedirs(output_path, exist_ok=True)
-                            txt_name = convert_to_yolo(json_path, output_path)
-                            print(f"Converted {json_path} -> {txt_name}")
+                # 지정한 위도-경도 조합으로만 필터링
+                for la in camera_las:
+                    for lo in camera_los:
+                        json_datas = get_filtered_jsons(json_path, camera_la=la, camera_lo=lo)
+                        
+                        if json_datas:
+                            for json_data in json_datas:
+                                group_type = 'train' if 'Training' in json_data else 'val'
+                                output_path = os.path.join(output_dir, group_type)
+                                os.makedirs(output_path, exist_ok=True)
+                                txt_name = convert_to_yolo(json_data, output_path)
+                                print(f"Converted {json_data} -> {txt_name}")

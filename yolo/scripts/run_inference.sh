@@ -2,7 +2,7 @@
 
 # YOLOv8n inference & cropping script
 yolo task=detect mode=predict \
-    model=weights/best.pt \
+    model=weights/best_TS_70.pt \
     source='inference_imgs/**/*' \
     save_crop=True
 

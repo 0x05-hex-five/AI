@@ -15,6 +15,7 @@ experiments/
 # etc
 *.zip
 *.tar.gz
+.venv/
 
 # YOLO
 /yolo/datasets

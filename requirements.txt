@@ -1,0 +1,9 @@
+torch
+torchvision
+torchaudio
+ultralytics==8.3.112
+opencv-python
+pandas
+matplotlib
+seaborn
+tqdm

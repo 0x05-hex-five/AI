@@ -13,9 +13,9 @@ for cls_dir in root.iterdir():
     random.shuffle(imgs)
     
     n = len(imgs)
-    train = imgs[:int(n * 0.8)]
-    val = imgs[int(n * 0.8):int(n * 0.9)]
-    test = imgs[int(n * 0.9):]
+    train = imgs[:int(n * 0.7)]
+    val = imgs[int(n * 0.7):int(n * 0.85)]
+    test = imgs[int(n * 0.85):]
 
     # Create directories for train, val, test
     (out / "train" / cls_dir.name).mkdir(parents=True, exist_ok=True)

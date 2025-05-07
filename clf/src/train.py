@@ -11,18 +11,21 @@ from tqdm.auto import tqdm
 from src.data import make_dataloaders, make_cv_dataloaders
 from src.model import build_model
 
+# A training function for one epoch
 def train_one_epoch(model, dataloader, criterion, optimizer, device, scaler, epoch, max_epoch):
     model.train()
     running_loss = 0.0
     correct = 0
     total = 0
 
+    # Use tqdm to show progress bar
     progress_bar = tqdm(
                         dataloader, 
                         desc=f"Epoch {epoch}/{max_epoch}",
                         leave=True
                         )
 
+    # Iterate over batches in the dataloader
     for images, labels in progress_bar:
         images, labels = images.to(device), labels.to(device)
 
@@ -72,6 +75,8 @@ def validate(model, dataloader, criterion, device):
         correct += (preds == labels).sum().item()
         total += labels.size(0)
 
+        # Update predictions and labels
+        # Convert to numpy arrays and extend the lists
         all_preds.extend(preds.cpu().numpy().tolist())
         all_labels.extend(labels.cpu().numpy().tolist())
 
@@ -86,10 +91,10 @@ def validate(model, dataloader, criterion, device):
     return avg_loss, acc, precision, recall, f1
 
 def log_gpu_usage(device):
-    allocated = torch.cuda.memory_allocated(device)   # 실제 할당된 메모리
-    reserved  = torch.cuda.memory_reserved(device)    # 캐시된 메모리
+    allocated = torch.cuda.memory_allocated(device)   # currently allocated memory
+    reserved  = torch.cuda.memory_reserved(device)    # reserved memory
     total     = torch.cuda.get_device_properties(device).total_memory
-    used_pct  = allocated / total * 100
+    used_pct  = allocated / total * 100 # percentage of used memory
     print(f"[GPU] Allocated: {allocated/1024**3:.2f} GB  "
           f"Reserved: {reserved/1024**3:.2f} GB  "
           f"Utilization: {used_pct:.1f}%")
@@ -97,6 +102,7 @@ def log_gpu_usage(device):
 def main(args):
     cfg = yaml.safe_load(open(args.config, "r"))
 
+    # bring in the config file
     ckpt_path = cfg["train"]["checkpoint_path"]
     ckpt_dir  = os.path.dirname(ckpt_path)
     os.makedirs(ckpt_dir, exist_ok=True)
@@ -113,7 +119,7 @@ def main(args):
 
     criterion = nn.CrossEntropyLoss()
     optimizer = AdamW(model.parameters(), lr=cfg["train"]["lr"])
-    scaler = GradScaler(enabled=cfg["train"]["amp"])
+    scaler = GradScaler(enabled=cfg["train"]["amp"]) # Automatic Mixed Precision
 
     patience = cfg["train"]["patience"]  # Early stopping patience
     wait = 0
@@ -126,6 +132,7 @@ def main(args):
                    f"Train Loss: {train_loss:.4f}  Train Acc: {train_acc:.4f}  "
                    f"Val Loss: {val_loss:.4f}  Val Acc: {val_acc:.4f}")
 
+        # Save the model if validation accuracy improves
         if val_acc > best_val_acc + 1e-4:
             best_val_acc = val_acc
             wait = 0
@@ -137,10 +144,12 @@ def main(args):
                 print(f"Early stopping at epoch {epoch} with patience {patience}")
                 break
 
+    # Load the best model for testing
     test_loss, test_acc, test_prec, test_rec, test_f1 = validate(model, test_loader, criterion, device)
     print(f"Test Loss: {test_loss:.4f}, Acc: {test_acc:.4f}, Prec: {test_prec:.4f}, \n"
           f"Rec: {test_rec:.4f}, F1: {test_f1:.4f}")
-    
+
+# cross-validation main function 
 def cv_main(args):
     cfg = yaml.safe_load(open(args.config))
 
@@ -148,6 +157,7 @@ def cv_main(args):
     ckpt_dir  = os.path.dirname(ckpt_path)
     os.makedirs(ckpt_dir, exist_ok=True)
     
+    # iterate over 5 folds
     for fold in range(5):
         print(f"Fold {fold + 1}/5")
         train_loader, val_loader = make_cv_dataloaders(cfg, fold=fold, n_splits=5)
@@ -169,6 +179,7 @@ def cv_main(args):
         best_scores = []
         best_val_acc = 0.0
 
+        # Training loop for each fold
         for epoch in range(1, cfg['train']['epochs'] + 1):
 
             train_loss, train_acc = train_one_epoch(model, train_loader, criterion, optimizer, device, scaler, epoch, cfg['train']['epochs'])
@@ -199,5 +210,5 @@ if __name__ == "__main__":
     parser.add_argument("--config", default="default.yaml")
 
     args = parser.parse_args()
-    # main(args)
-    cv_main(args)
+    # main(args) # main function for training
+    cv_main(args) # cross-validation function for training

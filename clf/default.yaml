@@ -1,7 +1,7 @@
 data:
   root: "dataset"
   img_size: 300
-  threshold: 890
+  threshold: 890 # Threshold for the number of images in a class to be considered for augmentation
 
 model:
   name: "tf_efficientnetv2_s"
@@ -16,6 +16,6 @@ train:
   lr: 0.0004
   epochs: 10
   amp: true
-  patience: 3
+  patience: 3 # Early stopping patience
   checkpoint_path: "runs/best_model.pth"
   cv_checkpoint_path: "runs/cv_best_model.pth"

@@ -37,7 +37,7 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device, scaler, epo
 
         scaler.scale(loss).backward()
         scaler.step(optimizer)
-        scaler.update()
+        scaler.update() # reduce the scale for the next iteration
 
         preds = outputs.argmax(1)
         running_loss += loss.item() * images.size(0)

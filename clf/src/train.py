@@ -210,5 +210,5 @@ if __name__ == "__main__":
     parser.add_argument("--config", default="default.yaml")
 
     args = parser.parse_args()
-    # main(args) # main function for training
-    cv_main(args) # cross-validation function for training
+    main(args) # main function for training
+    # cv_main(args) # cross-validation function for training

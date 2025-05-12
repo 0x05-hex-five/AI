@@ -2,6 +2,8 @@ import argparse, os, sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import yaml
 import numpy as np
+import pandas as pd
+from pathlib import Path
 import torch
 import torch.nn as nn
 from torch.optim import AdamW
@@ -90,6 +92,62 @@ def validate(model, dataloader, criterion, device):
 
     return avg_loss, acc, precision, recall, f1
 
+@torch.no_grad()
+def testing(model, dataloader, criterion, device, class_names=None):
+    model.eval()
+    running_loss = 0.0
+    correct = 0
+    total = 0
+    all_preds, all_labels = [], []
+
+    progress_bar = tqdm(
+                    dataloader, 
+                    desc="Testing",
+                    leave=True
+                    )
+
+    for images, labels in progress_bar:
+        images, labels = images.to(device), labels.to(device)
+
+        outputs = model(images)
+        loss = criterion(outputs, labels)
+        preds = outputs.argmax(1)
+
+        running_loss += loss.item() * images.size(0)
+        correct += (preds == labels).sum().item()
+        total += labels.size(0)
+
+        # Update predictions and labels
+        # Convert to numpy arrays and extend the lists
+        all_preds.extend(preds.cpu().numpy().tolist())
+        all_labels.extend(labels.cpu().numpy().tolist())
+
+    avg_loss = running_loss / total
+    acc = correct / total
+
+    from sklearn.metrics import precision_score, recall_score, f1_score, classification_report
+    precision = precision_score(all_labels, all_preds, average='macro')
+    recall = recall_score(all_labels, all_preds, average='macro')
+    f1 = f1_score(all_labels, all_preds, average='macro')
+
+    report_df = None
+    if class_names:
+        report_dict = classification_report(
+            all_labels,
+            all_preds,
+            target_names=class_names,
+            output_dict=True,   # to get a dict
+            digits=4,
+            zero_division=0
+        )
+        # Convert the report_dict to a DataFrame
+        report_df = pd.DataFrame(report_dict).T
+        out_dir = Path("reports")
+        out_dir.mkdir(parents=True, exist_ok=True)
+        report_df.to_csv(out_dir / "test_classification_report.csv")
+
+    return avg_loss, acc, precision, recall, f1
+
 def log_gpu_usage(device):
     allocated = torch.cuda.memory_allocated(device)   # currently allocated memory
     reserved  = torch.cuda.memory_reserved(device)    # reserved memory
@@ -145,7 +203,7 @@ def main(args):
                 break
 
     # Load the best model for testing
-    test_loss, test_acc, test_prec, test_rec, test_f1 = validate(model, test_loader, criterion, device)
+    test_loss, test_acc, test_prec, test_rec, test_f1 = testing(model, test_loader, criterion, device, class_names=test_loader.dataset.classes)
     print(f"Test Loss: {test_loss:.4f}, Acc: {test_acc:.4f}, Prec: {test_prec:.4f}, \n"
           f"Rec: {test_rec:.4f}, F1: {test_f1:.4f}")
 

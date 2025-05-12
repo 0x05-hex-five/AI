@@ -4,7 +4,7 @@ import torch.nn as nn
 
 def build_model(
     model_name: str = "tf_efficientnetv2_s",
-    num_classes: int = 92,
+    num_classes: int = 96,
     pretrained: bool = True,
     freeze_backbone: bool = False,
     multi_gpu: bool = True

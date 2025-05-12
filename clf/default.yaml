@@ -5,7 +5,7 @@ data:
 
 model:
   name: "tf_efficientnetv2_s"
-  num_classes: 92
+  num_classes: 96
   pretrained: true
   freeze_backbone: false
   multi_gpu: true

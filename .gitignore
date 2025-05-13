@@ -3,7 +3,7 @@ __pycache__/
 *.pyc
 
 # data & results
-data/
+test_data/
 experiments/
 *.csv
 *.xlsx
@@ -18,6 +18,8 @@ experiments/
 .venv/
 clf/.venv/
 yolo/.venv/
+gradio-venv/
+flagged/
 
 # YOLO
 /yolo/datasets

@@ -5,6 +5,10 @@ from torchvision.datasets import ImageFolder
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from sklearn.model_selection import StratifiedKFold
+from albumentations import Normalize
+
+mean = (0.485, 0.456, 0.406)
+std  = (0.229, 0.224, 0.225)
 
 def find_under_represented_classes(root, threshold=None):
     ds = ImageFolder(root)
@@ -17,7 +21,8 @@ def find_under_represented_classes(root, threshold=None):
 def get_transforms(img_size=300):
     base_tf = A.Compose([
         A.Resize(img_size, img_size),
-        A.Normalize(),
+        # A.Normalize(),
+        Normalize(mean=mean, std=std),
         ToTensorV2(),
     ])
     heavy_tf = A.Compose([
@@ -28,7 +33,8 @@ def get_transforms(img_size=300):
         ),
         A.RandomBrightnessContrast(brightness_limit=0.1,
                                    contrast_limit=0.1, p=1.0),
-        A.Normalize(),
+        # A.Normalize(),
+        Normalize(mean=mean, std=std),
         ToTensorV2(),
     ])
     return base_tf, heavy_tf

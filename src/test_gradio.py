@@ -87,20 +87,18 @@ def inference(img_pill: Image.Image):
 
     # get bounding boxes
     annotated = results.plot() # BGR image
-    annotated_rgb = cv2.cvtColor(annotated, cv2.COLOR_BGR2RGB) # convert to RGB for display
 
     boxes = results.boxes.xyxy.cpu().numpy()
     if len(boxes) == 0:
-        return annotated_rgb, "Failed to detect", None
+        return annotated, "Failed to detect", None
 
     areas = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1]) # (x2-x1)*(y2-y1)
     x1, y1, x2, y2 = boxes[areas.argmax()].astype(int) # get the largest area
     crop = img[y1:y2, x1:x2] # crop the original numpy image
-    crop_rgb = cv2.cvtColor(crop, cv2.COLOR_BGR2RGB) # convert to RGB for display
 
     # Classify
     # restore crop into PIL Image
-    tensor = alb_to_tensor(Image.fromarray(crop_rgb), base_tf).unsqueeze(0).to(device)
+    tensor = alb_to_tensor(Image.fromarray(crop), base_tf).unsqueeze(0).to(device)
     with torch.no_grad():
         logits = eff_model(tensor)                        # (1, num_classes)
         probs = torch.softmax(logits, dim=1).cpu().numpy()[0]  # shape: (num_classes,)
@@ -114,7 +112,7 @@ def inference(img_pill: Image.Image):
     prob_dict = { name: float(probs[i]) 
                   for i, name in enumerate(class_names) }
 
-    return annotated_rgb, crop_rgb, prob_dict
+    return annotated, crop, prob_dict
 
 demo = gr.Interface(
     fn=inference,

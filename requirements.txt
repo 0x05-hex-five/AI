@@ -10,6 +10,12 @@ ultralytics==8.3.112
 opencv-python==4.11.0.86
 Pillow==11.2.1
 numpy==1.24.4
+albumentations==1.3.0
+scikit-learn
+
+# Excel file handling
+pandas
+openpyxl
 
 # Web framework
 fastapi==0.95.2

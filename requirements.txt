@@ -1,6 +1,9 @@
+# Use Pytorch CPU wheels
+--extra-index-url https://download.pytorch.org/whl/cpu
+
 # Deep learning framework
-torch==2.0.0
-torchvision==0.15.1
+torch==2.0.0+cpu
+torchvision==0.15.1+cpu
 timm==1.0.15
 
 # YOLOv8

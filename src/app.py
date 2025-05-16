@@ -1,5 +1,3 @@
-import os, sys
-
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from ultralytics import YOLO
 import torch, cv2, numpy as np
@@ -8,13 +6,8 @@ from PIL import Image
 from torchvision import transforms
 from collections import OrderedDict
 
-script_dir = os.path.dirname(__file__)  
-lib_src = os.path.abspath(os.path.join(script_dir, "..", "clf", "src"))
-if lib_src not in sys.path:
-    sys.path.insert(0, lib_src)
-
-from data import get_transforms, alb_to_tensor
-from model import build_model
+from src.data import get_transforms, alb_to_tensor
+from src.model import build_model
 
 app = FastAPI(title="Pill Detection & Classification")
 

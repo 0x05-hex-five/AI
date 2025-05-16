@@ -1,0 +1,22 @@
+# virtualenv
+app-venv/
+gradio-env/
+
+# dataset
+166.약품식별 인공지능 개발을 위한 경구약제 이미지 데이터/
+data_preparation/
+flagged/
+test_data/
+
+# directory
+__pycache__/
+clf/
+yolo/
+
+# model
+weights/
+
+# etc
+*.md
+requirements_gradio.txt
+.git

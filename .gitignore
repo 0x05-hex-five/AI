@@ -15,7 +15,7 @@ experiments/
 # etc
 *.zip
 *.tar.gz
-.venv/
+app-venv/
 clf/.venv/
 yolo/.venv/
 gradio-venv/

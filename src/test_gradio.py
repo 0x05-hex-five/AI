@@ -45,7 +45,7 @@ from model import build_model
 
 # settings
 yolo_weights = "weights/best_yolo_TS_70.pt"
-eff_weights = "weights/best_eff.pth"
+eff_weights = "weights/15_best_model.pth"
 img_size = 300
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -53,7 +53,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 yolo_model = YOLO(yolo_weights)
 eff_model, _ = build_model(
     model_name="tf_efficientnetv2_s",
-    num_classes=96,
+    num_classes=15,
     pretrained=False,
     freeze_backbone=False,
     multi_gpu=False
@@ -109,8 +109,10 @@ def inference(img_pill: Image.Image):
     top_prob  = float(probs[top_idx])
 
     # 모든 클래스 확률을 name→prob dict 로
+    # prob_dict = { name: float(probs[i]) 
+    #               for i, name in enumerate(class_names) }
     prob_dict = { name: float(probs[i]) 
-                  for i, name in enumerate(class_names) }
+                  for i, name in enumerate(['글리아타민', '글리아티린', '로수젯', '리바로', '리피토', '릭시아나', '비리어드', '아리셉트', '아리셉트에비스', '아모잘탄', '아모잘탄큐', '아모잘탄플러스', '아토젯', '트윈스타', '플라빅스']) } # 1% 이상 확률만
 
     return annotated, crop, prob_dict
 

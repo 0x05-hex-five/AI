@@ -33,7 +33,7 @@ import numpy as np
 from ultralytics import YOLO
 
 IMAGE_SIZE = 392              # keep consistent with training
-MODEL_PATH = "weights/model_ts.pt"
+MODEL_PATH = "weights/model_ts_stage1.pt"
 yolo_weights = "weights/best_yolo_TS_70.pt"
 CLASSES = ["글리아타민", "글리아티린", "로수젯", "리바로", '리피토', '릭시아나', '비리어드', '아리셉트', '아리셉트에비스', '아모잘탄', '아모잘탄큐', '아모잘탄플러스', '아토젯', '트윈스타', '플라빅스']
 
@@ -60,7 +60,7 @@ model_ts = torch.jit.load(str(MODEL_PATH), map_location="cpu").eval()
 def predict(image: Image.Image):
     # YOLO detect
     img_bgr = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-    results = yolo_model(img_bgr, imgsz=640)[0]
+    results = yolo_model(img_bgr, imgsz=640, conf=0.08)[0]
 
     # get bounding boxes
     annotated = results.plot() # BGR image
@@ -69,8 +69,14 @@ def predict(image: Image.Image):
     if len(boxes) == 0:
         return annotated, "Failed to detect", None
     
-    areas = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1]) # (x2-x1)*(y2-y1)
-    x1, y1, x2, y2 = boxes[areas.argmax()].astype(int) # get the largest area
+    # get the largest area
+    # areas = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1]) # (x2-x1)*(y2-y1)
+    # x1, y1, x2, y2 = boxes[areas.argmax()].astype(int) # get the largest area
+
+    # get highest confidence box
+    confs = results.boxes.conf.cpu().numpy()
+    x1, y1, x2, y2 = boxes[confs.argmax()].astype(int) # get the highest confidence box
+
     crop_bgr = img_bgr[y1:y2, x1:x2] # crop the original numpy image
     crop_rgb = cv2.cvtColor(crop_bgr, cv2.COLOR_BGR2RGB) # convert to RGB
     crop = Image.fromarray(crop_rgb) # convert to PIL image

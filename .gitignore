@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.pyc
+
+# data & results
+test_data/
+*.csv
+*.xlsx
+*.json
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# etc
+*.zip
+*.tar.gz
+*.pth
+app-venv/
+yolo/.venv/
+gradio-venv/
+experiments/.venv
+experiments/clf-venv
+flagged/
+
+# YOLO
+experiments/yolo/datasets
+experiments/yolo/weights
+experiments/yolo/runs
+experiments/yolo/inference_imgs
+
+# ─── experiments/archive 전용 무시 리스트 ────────────────────
+
+# project scaffolding in root (not needed here)
+.dockerignore
+Dockerfile
+README.md
+app.py
+pull_request_template.md
+requirements.txt
+requirements_gradio.txt
+
+# directories not tracked in this branch
+data_preparation/
+embeddings/
+knn_src/
+test/

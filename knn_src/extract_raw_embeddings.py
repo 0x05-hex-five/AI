@@ -11,6 +11,11 @@ from torch.utils.data import DataLoader, Dataset
 
 from .knn_utils import get_transform, load_dataset
 
+"""
+# This script extracts raw DINO embeddings for images in specified directories.
+# It loads a pretrained DINO model, processes images, and saves their embeddings and labels to a pickle file.
+"""
+
 class EmbeddingDataset(Dataset):
     def __init__(self, paths: List[str], labels: List[int], transform):
         self.paths = paths

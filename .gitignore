@@ -15,6 +15,7 @@ experiments/
 # etc
 *.zip
 *.tar.gz
+*.pth
 app-venv/
 clf/clf-venv/
 yolo/.venv/

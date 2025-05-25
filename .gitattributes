@@ -1,2 +1,4 @@
 # set all text files to use LF line endings
 * text=auto eol=lf
+embeddings/*.pkl filter=lfs diff=lfs merge=lfs -text
+embeddings/*.index filter=lfs diff=lfs merge=lfs -text

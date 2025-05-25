@@ -1,9 +1,0 @@
-# Dataset configuration file for YOLOv8n
-# This file contains the paths to the training and validation datasets
-# and the names of the classes.
-
-# Detecting only one class: pill
-train: /data1/team5_2/yolo/datasets/images/train
-val: /data1/team5_2/yolo/datasets/images/val
-names:
-  0: pill

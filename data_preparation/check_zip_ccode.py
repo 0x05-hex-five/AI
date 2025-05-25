@@ -36,7 +36,7 @@ def match_ccode_with_zip(zip_root, excel_path, output_path):
 
 if __name__ == "__main__":
     zip_root = r'C:\Users\daniel\Capstone\AI\166.약품식별 인공지능 개발을 위한 경구약제 이미지 데이터\01.데이터\1.Training\라벨링데이터\단일경구약제 5000종'
-    excel_path = r'C:\Users\daniel\Capstone\AI\clf\new 학습데이터 리스트.xlsx'
-    output_path = r'C:\Users\daniel\Capstone\AI\clf\new 학습데이터 리스트_결과.xlsx'
+    excel_path = r'C:\Users\daniel\Capstone\AI\new 학습데이터 리스트.xlsx'
+    output_path = r'C:\Users\daniel\Capstone\AI\new 학습데이터 리스트_결과.xlsx'
 
     match_ccode_with_zip(zip_root, excel_path, output_path)

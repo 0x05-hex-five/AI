@@ -41,3 +41,6 @@ boto3==1.26.152
 
 # HTTP client for external API calls
 requests==2.32.3
+
+# Hugging FaceHub
+huggingface-hub>=0.16.4

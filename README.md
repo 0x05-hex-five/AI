@@ -69,6 +69,7 @@ AI/
     cd pill-project/embeddings
     ls
    ```
+   Then, relocate "embeddings" folder into project root directory
 
 5. *(Optional)* **Install Gradio UI dependencies**
 

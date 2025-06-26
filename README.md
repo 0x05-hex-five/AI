@@ -1,6 +1,10 @@
 # AI Module for Capstone Project
 
-A computer-vision pipeline for pill detection and classification using DINO embeddings, FAISS-backed KNN, and a FastAPI inference server.
+---
+
+## 🔎 Overview
+
+This project enables fast and accurate pill identification from images using self-supervised DINO embeddings and FAISS-backed KNN search. Designed for real-world pharmaceutical applications, it allows efficient retrieval and classification of pill types among 100,000+ images.
 
 ---
 

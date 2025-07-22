@@ -1,116 +1,49 @@
-# AI Module for Capstone Project
+# 🧩 Pill Image Retrieval & Search Pipeline
+This repository implements a robust backend for real-time pill image search and retrieval using DINO-ViT embeddings and FAISS KNN search. It is designed as a modular API component within a larger end-to-end pill identification service.
 
----
+## 📂 Pipeline Overview
+1. Data Preparation (data_preparation/)
+   - Extracts and organizes raw pill image datasets.
+   - Performs train/val/test splits and data integrity checks.
 
-## 🔎 Overview
+2. Reference Embedding Extraction (knn_src/extract_raw_embeddings.py)
+   - Uses a DINO-ViT model to extract embeddings for all reference pill images.
+   - Stores output as .pkl embedding files and corresponding label CSVs.
 
-This project enables fast and accurate pill identification from images using self-supervised DINO embeddings and FAISS-backed KNN search. Designed for real-world pharmaceutical applications, it allows efficient retrieval and classification of pill types among 100,000+ images.
+3. FAISS Index Construction (knn_src/build_faiss_index.py)
+   - Loads embeddings and labels to build a FAISS index (FlatIP).
+   - Saves as knn_flatip.index for efficient similarity search.
 
----
+4. KNN Search & Inference (knn_src/knn_utils.py, test/predict_knn.py)
+   - For each query (user-uploaded) image:
+     - Extracts its DINO embedding.
+     - Searches the FAISS index for the top-k most similar reference pills.
+     - Returns pill code, name, and similarity scores.
 
-## 📂 Repository Structure
+5. API Service (app.py)
+   - FastAPI server exposes a `/predict` endpoint.
+   - Accepts image uploads and returns top pill candidates as JSON.
+   - Includes a Gradio-based demo UI (`test/test_gradio_knn.py`) for interactive local testing.
 
-```text
-AI/
-├── data_preparation/          # download & unzip raw data, basic preprocessing
-│   ├── add_item_seq.py
-│   ├── check_zip_ccode.py
-│   ├── extract_zips.py
-│   ├── move_dataset.py
-│   └── split_dataset.py
-├── knn_src/                   # build and query FAISS index for KNN classification
-│   ├── build_faiss_index.py
-│   ├── extract_raw_embeddings.py
-│   └── knn_utils.py
-├── test/                      # test code
-|   ├── predict_knn.py
-│   └── test_gradio_knn.py
-├── app.py                     # FastAPI app exposing /predict endpoint
-├── Dockerfile                 # containerize the API
-├── requirements.txt           # core Python dependencies
-├── requirements_gradio.txt    # optional Gradio UI dependencies
-├── pull_request_template.md   # PR template
-├── .gitignore
-├── .gitattributes
-├── .dockerignore
-└── README.md                  # this file
-```
+6. Docker & Deployment
+   - Dockerfile and requirements.txt are provided for easy containerization and deployment.
 
----
+## 🔗 End-to-End Service Flow
+1. The user uploads a photo containing a pill.
+2. The application provides an interface for the user to crop the image to focus on the individual pill.
+3. The cropped pill image is sent to this module, which extracts its DINO embedding, performs a KNN search with FAISS, and returns the top matching reference pills.
+4. The frontend displays the candidate pill names, codes, and similarity scores to the user.
 
-## 🚀 Getting Started
+## 🏷️ Key Files & Roles
+| File/Folder                         | Description                                      |
+| ----------------------------------- | ------------------------------------------------ |
+| `data_preparation/`                 | Data download, extraction, splitting, cleaning   |
+| `knn_src/extract_raw_embeddings.py` | DINO-ViT feature extraction for reference images |
+| `knn_src/build_faiss_index.py`      | FAISS index creation                             |
+| `knn_src/knn_utils.py`              | Embedding, KNN search, result formatting         |
+| `test/predict_knn.py`               | Local/batch prediction tests                     |
+| `app.py`                            | FastAPI inference server                         |
+| `test/test_gradio_knn.py`           | Gradio demo UI                                   |
+| `Dockerfile`                        | Containerization                                 |
+| `requirements.txt`                  | Dependencies                                     |
 
-1. **Clone the repo**
-
-   ```bash
-   git clone https://github.com/0x05-hex-five/AI.git
-   cd AI
-   ```
-
-2. **Create & activate a virtual environment**
-
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate        # Linux/macOS
-   .\.venv\Scripts\activate       # Windows PowerShell
-   ```
-
-3. **Install core dependencies**
-
-   ```bash
-   pip install --upgrade pip
-   pip install -r requirements.txt
-   ```
-
-4. **Install embeddings**
-
-   ```bash
-    huggingface-cli login
-    git lfs install
-
-    # Clone only embeddings folder
-    git clone https://huggingface.co/danielee982/pill-project
-    cd pill-project/embeddings
-    ls
-   ```
-   Then, relocate "embeddings" folder into project root directory
-
-5. *(Optional)* **Install Gradio UI dependencies**
-
-   ```bash
-   pip install -r requirements_gradio.txt
-   ```
-
----
-
-## ⚙️ Building the FAISS Index
-
-```bash
-python knn_src/build_faiss_index.py \
-  --embeddings path/to/embeddings_dino_raw.pkl \
-  --labels   path/to/labels.csv \
-  --output   embeddings/knn_flatip.index
-```
-
----
-
-## 🌐 Running the API Server
-
-Start the FastAPI server locally:
-
-```bash
-uvicorn app:app --reload --host 0.0.0.0 --port 8000
-```
-
-* Visit the interactive docs at: [http://localhost:8000/docs](http://localhost:8000/docs)
-
----
-
-## 📦 Docker
-
-Build and run via Docker:
-
-```bash
-docker build -t ai-service:latest .
-docker run -p 8000:8000 ai-service:latest
-```
